@@ -1,0 +1,20 @@
+class Solution(object):
+    def minWindow(self, s, t):
+        from collections import Counter
+        mp, count = Counter(t), len(set(t))
+        i = start = 0
+        ans = float('inf')
+
+        for j, c in enumerate(s):
+            mp[c] -= 1
+            if mp[c] == 0:
+                count -= 1
+            while count == 0:
+                if j - i + 1 < ans:
+                    ans, start = j - i + 1, i
+                mp[s[i]] += 1
+                if mp[s[i]] > 0:
+                    count += 1
+                i += 1
+
+        return s[start:start + ans] if ans != float('inf') else ""
