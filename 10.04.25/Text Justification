@@ -1,0 +1,43 @@
+class Solution(object):
+    def fullJustify(self, words, maxWidth):
+        """
+        :type words: List[str]
+        :type maxWidth: int
+        :rtype: List[str]
+        """
+        n = len(words)
+        character_count = 0
+        line = []
+        lines = []
+        for i, word in enumerate(words):
+            if character_count + len(word) < maxWidth:
+                line.append(word)
+                character_count += len(word) + 1
+            elif character_count + len(word) == maxWidth:
+                line.append(word)
+                character_count += len(word)
+            else:
+                new_line = self.compute_line(line, maxWidth)
+                lines.append(''.join(new_line))
+                line = [word]
+                character_count = len(word) + 1
+            if i == n - 1:
+                new_line = ' '.join(line)
+                new_line += ' ' * (maxWidth - len(new_line))
+                lines.append(new_line)
+        return lines
+    
+    def compute_line(self, line, maxWidth):
+        if len(line) == 1:
+            line[0] += (maxWidth - len(line[0])) * ' '
+        else:
+            characters_in_line = sum([len(w) for w in line])
+            whitespaces = [(maxWidth - characters_in_line) // (len(line) - 1) for l in range(len(line) - 1)]
+            for j in range((maxWidth - characters_in_line) % (len(line) - 1)):
+                whitespaces[j] += 1
+            for k in range(len(whitespaces)):
+                line[k] += whitespaces[k]*' '
+        return line
+            
+
+        
